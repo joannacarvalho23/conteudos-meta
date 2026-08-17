@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Código de autorização</title>
+<link rel="stylesheet" href="estilo.css">
+<style>
+  #codigo {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 1rem; word-break: break-all; padding: 1rem;
+    border: 1px solid #9ca3af; border-radius: 8px; background: rgba(127,127,127,.08);
+  }
+  button { margin-top: 1rem; padding: .6rem 1.1rem; font-size: 1rem; border-radius: 8px;
+           border: 1px solid #9ca3af; background: transparent; color: inherit; cursor: pointer; }
+  .erro { color: #b91c1c; }
+</style>
+</head>
+<body>
+<h1>Código de autorização</h1>
+<p class="data">Copie o código abaixo e cole no terminal, onde ele estiver pedindo.</p>
+<div id="codigo">lendo...</div>
+<button id="copiar">Copiar código</button>
+<script>
+  const p = new URLSearchParams(location.search);
+  const code = p.get("code"), erro = p.get("error");
+  const alvo = document.getElementById("codigo");
+  if (code) {
+    alvo.textContent = code;
+  } else {
+    alvo.className = "erro";
+    alvo.textContent = erro
+      ? "A autorização foi recusada: " + erro
+      : "Nenhum código na URL. Abra esta página pelo link de autorização do TikTok.";
+  }
+  document.getElementById("copiar").onclick = () => {
+    if (code) navigator.clipboard.writeText(code).then(() => {
+      document.getElementById("copiar").textContent = "copiado";
+    });
+  };
+</script>
+</body>
+</html>
